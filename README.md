@@ -72,7 +72,6 @@ Each curated sample includes:
 | Model     | Reason for Rejection                                                                    |
 | --------- | --------------------------------------------------------------------------------------- |
 | `BLIP`    | Fine-tuning caused internal errors; not suited for classification-style VQA tasks.      |
-| `BLIP-2`  | Too large for Kaggle's compute limitations.                                             |
 | `Qwen`    | Fine-tuned successfully, but inference led to GPU memory overflow on T4 GPUs.           |
 | `ViLBERT` | Uses two-stream architecture; LoRA integration requires deep architectural changes.     |
 | `CLIP`    | Not directly suited for Q-A without extensive retraining; designed for retrieval tasks. |
