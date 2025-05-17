@@ -79,18 +79,17 @@ Each curated sample includes:
 | `LLaVA`   | Overkill for tasks with short, simple answers; too resource-intensive.                  |
 
 
-### ⚠️ Problems with BLIP Model
+### ⚠️ Challenges with BLIP Model
 
 BLIP worked well for inference, but fine-tuning was difficult.
 
 * The model threw errors like `unexpected keyword argument 'inputs_embeds'` during training.
 * Its forward method and internal structure aren’t standard, making it hard to plug in training logic.
-* BLIP is designed to *generate* answers, not to be trained with fixed label classes, so adapting it for classification tasks needs extra work.
 * LoRA didn’t integrate smoothly without custom changes.
 
 ---
 
-### ⚠️ Problems with Qwen
+### ⚠️ Challenges with Qwen
 
 We successfully fine-tuned Qwen using LoRA, but inference failed.
 
@@ -100,7 +99,7 @@ We successfully fine-tuned Qwen using LoRA, but inference failed.
 
 ---
 
-### ⚠️ Problems with ViLBERT
+### ⚠️ Challenges with ViLBERT
 
 ViLBERT’s architecture made LoRA integration tough.
 
@@ -219,9 +218,14 @@ the semantic similarity between the generated and reference text
 
 #### Interpreting Accuracy
 The substantial jump to 49.13% exact match accuracy demonstrates a remarkable improvement. 
-After fine-tuning with LoRA, your model is now nearly five times more likely to generate outputs 
+After fine-tuning with LoRA, the model is now nearly five times more likely to generate outputs 
 that are word-for-word identical to the correct answers. This signifies a much better ability to 
 understand and replicate the specific phrasing required.
+
+## Experiments
+- Increased epochs from 7 to 15 but metrics were'nt promising.
+- Ran inference multiple times but model outputs remain the same.
+- Took metadata from various listings: `listings_1.json`, `listings_d.json`, `listings_e.json`, `listings_f.json`
 
 
 ## 5. **Any Additional Contribution / Novelty**
