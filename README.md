@@ -120,8 +120,11 @@ ViLT was the most LoRA-friendly option.
 * It’s lightweight and runs smoothly even on mid-range GPUs.
 * We were able to fine-tune and run inference with no major issues.
 
-#### Sample predictions
-![five-predictions-from-DataFrame](./assets/sample-results.png)
+#### Sample predictions from baseline model
+![baseline-predictions-from-DataFrame](./assets/sample-baseline-results.png)
+
+#### Sample predictions from finetuned model
+![five-predictions-from-DataFrame](./assets/sample-finetuned-results.png)
 
 ---
 
