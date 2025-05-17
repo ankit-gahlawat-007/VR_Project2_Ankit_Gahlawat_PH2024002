@@ -113,6 +113,9 @@ LoRA enabled efficient fine-tuning of just a few trainable parameters within att
 - Batch Size: `16`
 - Device: GPU (`cuda`) when available
 
+![epochs](https://github.com/user-attachments/assets/1be00a69-e071-418e-b2e5-657467e1af6b)
+
+
 The training loop computes loss via the model's classification head using one-hot labels, backpropagates, and optimizes parameters.
 
 ---
