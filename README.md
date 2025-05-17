@@ -42,10 +42,11 @@ Example prompt snippet:
 
 ### 🔁 Process Pipeline
 
-1. Randomly sampled **1024** product listings from ABO.
-2. Merged listings with image metadata to obtain image paths and dimensions.
-3. Extracted metadata fields like `color`, `material`, `brand`, `product_type`, etc.
-4. For each product image:
+1. Randomly sampled **3500** product listings from ABO.
+2. Used 3000 for training and kept aside 500 for testing.
+3. Merged listings with image metadata to obtain image paths and dimensions.
+4. Extracted metadata fields like `color`, `material`, `brand`, `product_type`, etc.
+5. For each product image:
    - Read the image in binary.
    - Fused it with metadata into a multimodal Gemini prompt.
    - Parsed the returned JSON of 3 Q-A pairs.
