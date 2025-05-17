@@ -109,7 +109,7 @@ LoRA enabled efficient fine-tuning of just a few trainable parameters within att
 ### 🔁 Training Loop
 
 - Optimizer: `AdamW`, learning rate `5e-5`
-- Epochs: `5`
+- Epochs: `7`
 - Batch Size: `16`
 - Device: GPU (`cuda`) when available
 
@@ -119,17 +119,37 @@ The training loop computes loss via the model's classification head using one-ho
 
 ## 4. **Evaluation Metrics**
 
-> _(Leave this section blank for now. Fill in later after running the evaluation.)_
+This section compares the performance of the model **before and after fine-tuning with LoRA**. Inference was done using `run_vqa_inference()` and performance metrics were calculated using `evaluate_vqa_predictions()`.
 
-### ✅ Standard Metrics
+---
 
-- **Accuracy**:
-- **F1 Score**:
+### 🧪 Metrics Used
 
-### 📌 Additional Metrics (Planned)
+- **Exact Match Accuracy**: Measures whether predicted answer exactly matches the ground truth.
+- **BERTScore (F1)**: Token-level semantic similarity using contextual embeddings.
+- **BARTScore**: Measures fluency and closeness using BART's generation loss.
 
-- **BERTScore** or **BLEU** for answer similarity.
-- **Top-k Accuracy** in case of ambiguous answers.
+These metrics offer a mix of strict correctness and soft similarity to better evaluate the model's understanding of visual and textual cues.
+
+---
+
+### 📊 Baseline Evaluation (Pretrained Model)
+
+- ✅ **Exact Match Accuracy**: `0.1047`
+- ✅ **Mean BERTScore (F1)**: `0.3146`
+- ✅ **Mean BARTScore**: `-6.1556`
+
+The baseline performance was low due to domain gap and label mismatch, indicating the pretrained model struggled to generalize to ABO-curated questions.
+
+---
+
+### 🔁 Evaluation After Fine-Tuning with LoRA
+
+- 🚀 **Exact Match Accuracy**: `0.4913`
+- 🚀 **Mean BERTScore (F1)**: `0.6481`
+- 🚀 **Mean BARTScore**: `-4.2239`
+
+Fine-tuning significantly improved all metrics. Exact match accuracy nearly **5×** baseline, and semantic similarity (BERTScore, BARTScore) showed consistent gains.
 
 ---
 
