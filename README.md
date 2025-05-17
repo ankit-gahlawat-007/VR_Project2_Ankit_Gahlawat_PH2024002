@@ -9,13 +9,14 @@
 
 ## 1. **Data Curation**
 
-We curated a Visual Question Answering (VQA) dataset using the **Amazon Berkeley Objects (ABO)** dataset. The goal was to generate diverse, image-grounded, single-word question-answer pairs using both product images and associated metadata.
+We curated a Visual Question Answering (VQA) dataset using the **Amazon Berkeley Objects (ABO)** dataset. 
+The goal was to generate diverse, image-grounded, single-word question-answer pairs using both product images and associated metadata.
 
 ### 🔧 Tools Used
 
 - **Gemini 1.5 Flash** (via Google AI Studio): Used for generating questions based on image and metadata.
 - **Python + Google SDK (`google-genai`)**: Handled multimodal prompts.
-- **Metadata**: Parsed from `listings_1.json` and `images.csv` from the ABO dataset.
+- **Metadata**: Parsed from `listings_1.json` (and various other listings) and `images.csv` from the ABO dataset.
 
 ### 🧠 Prompt Design
 
@@ -161,7 +162,7 @@ LoRA enabled efficient fine-tuning of just a few trainable parameters within att
 - Optimizer: `AdamW`, learning rate `5e-5`
 - Epochs: `7`
 - Batch Size: `16`
-- Device: GPU (`cuda`) when available
+- Device: Kaggle T4 GPUs (16GB each) (`cuda`) 
 
 ![epochs](https://github.com/user-attachments/assets/1be00a69-e071-418e-b2e5-657467e1af6b)
 
@@ -172,7 +173,8 @@ The training loop computes loss via the model's classification head using one-ho
 
 ## 4. **Evaluation Metrics**
 
-This section compares the performance of the model **before and after fine-tuning with LoRA**. Inference was done using `run_vqa_inference()` and performance metrics were calculated using `evaluate_vqa_predictions()`.
+This section compares the performance of the model **before and after fine-tuning with LoRA**. 
+Inference was done using `run_vqa_inference()` and performance metrics were calculated using `evaluate_vqa_predictions()`.
 
 ---
 
@@ -221,13 +223,13 @@ After fine-tuning with LoRA, the model is now nearly five times more likely to g
 that are word-for-word identical to the correct answers. This signifies a much better ability to 
 understand and replicate the specific phrasing required.
 
-## Experiments
-- Increased epochs from 7 to 15 but metrics were'nt promising.
-- Ran inference multiple times but model outputs remain the same.
-- Took metadata from various listings: `listings_1.json`, `listings_d.json`, `listings_e.json`, `listings_f.json`
+## 5. Experiments
+- Increased epochs from 7 to 15 but change in output and metrics was nothing to write home about.
+- Ran inference multiple times but model's output remain the same.
+- Took metadata from various listings: `listings_1.json`, `listings_d.json`, `listings_e.json`, `listings_f.json` for data curation phase.
 
 
-## 5. **Any Additional Contribution / Novelty**
+## 6. **Any Additional Contribution / Novelty**
 
 - ✅ **Prompt-grounded Question Generation** with Gemini using structured JSON output.
 - ✅ **Metadata-anchored Q-A pairs** ensure interpretability.
