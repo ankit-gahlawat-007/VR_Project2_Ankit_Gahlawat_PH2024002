@@ -1,5 +1,4 @@
-
-# 📘 Multimodal Visual Question Answering with Amazon Berkeley Objects Dataset
+# 📘 Report on Multimodal Visual Question Answering with Amazon Berkeley Objects Dataset
 
 
 ## Contributors:
@@ -67,19 +66,62 @@ Each curated sample includes:
 
 ## 2. **Model Choices**
 
-We selected `dandelin/vilt-b32-finetuned-vqa` for its following strengths:
 
-- ⚡ **Efficient Vision-Language Processing**: Does not rely on region-based features.
-- 🔍 **Pre-trained for VQA**: Already trained on VQA v2, offering good generalization.
-- 🪶 **Compatible with LoRA**: Supports parameter-efficient tuning via `peft`.
+### ❓ Models Considered
 
-### ❓Alternatives Considered
+| Model     | Reason for Rejection                                                                    |
+| --------- | --------------------------------------------------------------------------------------- |
+| `BLIP`    | Fine-tuning caused internal errors; not suited for classification-style VQA tasks.      |
+| `BLIP-2`  | Too large for Kaggle's compute limitations.                                             |
+| `Qwen`    | Fine-tuned successfully, but inference led to GPU memory overflow on T4 GPUs.           |
+| `ViLBERT` | Uses two-stream architecture; LoRA integration requires deep architectural changes.     |
+| `CLIP`    | Not directly suited for Q-A without extensive retraining; designed for retrieval tasks. |
+| `LLaVA`   | Overkill for tasks with short, simple answers; too resource-intensive.                  |
 
-| Model              | Reason for Rejection                         |
-|-------------------|----------------------------------------------|
-| `BLIP-2`           | Too large for Kaggle's compute limitations.  |
-| `CLIP`             | Not directly suited for Q-A without retraining. |
-| `LLaVA`            | Overkill for single-word answers.            |
+
+### ⚠️ Problems with BLIP Model
+
+BLIP worked well for inference, but fine-tuning was difficult.
+
+* The model threw errors like `unexpected keyword argument 'inputs_embeds'` during training.
+* Its forward method and internal structure aren’t standard, making it hard to plug in training logic.
+* BLIP is designed to *generate* answers, not to be trained with fixed label classes, so adapting it for classification tasks needs extra work.
+* LoRA didn’t integrate smoothly without custom changes.
+
+---
+
+### ⚠️ Problems with Qwen
+
+We successfully fine-tuned Qwen using LoRA, but inference failed.
+
+* The main issue was **GPU memory overflow** during inference.
+* On Kaggle’s dual T4 GPUs (16GB each), the model crashed when handling even simple decoding tasks.
+* It was too heavy for our setup, especially for deployment.
+
+---
+
+### ⚠️ Problems with ViLBERT
+
+ViLBERT’s architecture made LoRA integration tough.
+
+* It uses **two separate streams** for image and text, connected by co-attentional layers.
+* These layers don’t follow standard transformer structures, so LoRA couldn’t be applied easily.
+* Modifying the architecture would be complex and time-consuming.
+
+---
+
+### ✅ Why We Chose ViLT
+
+ViLT was the most LoRA-friendly option.
+
+* It uses a **single-stream transformer**, just like BERT or ViT.
+* LoRA fits easily into its attention and MLP layers without extra work.
+* Hugging Face and PEFT libraries support it well.
+* It’s lightweight and runs smoothly even on mid-range GPUs.
+* We were able to fine-tune and run inference with no major issues.
+
+#### Sample predictions
+![five-predictions-from-DataFrame](./assets/sample-results.png)
 
 ---
 
@@ -162,6 +204,22 @@ The baseline performance was low due to domain gap and label mismatch, indicatin
 Fine-tuning significantly improved all metrics. Exact match accuracy nearly **5×** baseline, and semantic similarity (BERTScore, BARTScore) showed consistent gains.
 
 ---
+
+#### Interpreting BARTScore
+The improvement in Mean BARTScore from -6.15 to -4.22, while still negative, indicates that the fine-tuned model is now better at 
+generating text that is more consistent with and informed by the input. This suggests that the fine-tuning process has helped the 
+model learn to better leverage the input information to produce more relevant and coherent outputs.
+
+#### Interpreting BERTScore
+The considerable increase in Mean BERTScore from 0.31 to 0.64 highlights a significant enhancement in 
+the semantic similarity between the generated and reference text
+
+#### Interpreting Accuracy
+The substantial jump to 49.13% exact match accuracy demonstrates a remarkable improvement. 
+After fine-tuning with LoRA, your model is now nearly five times more likely to generate outputs 
+that are word-for-word identical to the correct answers. This signifies a much better ability to 
+understand and replicate the specific phrasing required.
+
 
 ## 5. **Any Additional Contribution / Novelty**
 
