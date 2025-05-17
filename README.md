@@ -1,5 +1,12 @@
 
-# 📘 Comprehensive Report: Visual Question Answering on ABO Dataset
+# 📘 Multimodal Visual Question Answering with Amazon Berkeley Objects Dataset
+
+
+## Contributors:
+- Ankit Gahlawat - PH2024002
+- Kushagra Mehrotra - MS2024011
+- Garvit Singla - MS2024009
+
 
 ## 1. **Data Curation**
 
