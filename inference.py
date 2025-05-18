@@ -1,3 +1,4 @@
+import os
 import argparse
 import pandas as pd
 from PIL import Image
@@ -13,10 +14,15 @@ def main():
     parser.add_argument('--csv_path', type=str, required=True, help='Path to image-metadata CSV')
     args = parser.parse_args()
 
+    script_dir = os.path.dirname(os.path.abspath(__file__))
     # Example usage:
     zip_url = "https://huggingface.co/kushaaagr/Vilt-finetuned-for-VQA/resolve/main/vilt-finetuned-vqa-15.zip"
-    output_directory = "."
+    # output_directory = "."
+    output_directory = f"{script_dir}/models"
+    os.makedirs(output_directory, exist_ok=True)
     extracted_path = download_and_extract(zip_url, output_directory)
+    model_dirname = "vilt-finetuned-vqa-15"
+    vilt_dir = f"{output_directory}/{model_dirname}"
 
     # Load metadata CSV
     df = pd.read_csv(args.csv_path)
@@ -25,8 +31,8 @@ def main():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     # ✅ Load processor and config from finetuned LoRA folder
-    processor = ViltProcessor.from_pretrained("vilt-finetuned-vqa-15")
-    config = ViltConfig.from_pretrained("vilt-finetuned-vqa-15")  # Must include correct num_labels = 841
+    processor = ViltProcessor.from_pretrained(vilt_dir)
+    config = ViltConfig.from_pretrained(vilt_dir)  # Must include correct num_labels = 841
 
     # ✅ Load base model with config — but DO NOT load weights from vilt-finetuned-vqa
     base_model = ViltForQuestionAnswering.from_pretrained(
@@ -36,7 +42,7 @@ def main():
     )
 
     # ✅ Attach the LoRA adapter trained on top of this config
-    model = PeftModel.from_pretrained(base_model, "vilt-finetuned-vqa-15")
+    model = PeftModel.from_pretrained(base_model, vilt_dir)
 
     model.to(device)
     model.eval()
