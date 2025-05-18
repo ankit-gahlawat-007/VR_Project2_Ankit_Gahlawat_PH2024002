@@ -64,6 +64,9 @@ Each curated sample includes:
 }
 ```
 
+Although we used JSON format, we have provided the dataset in CSV format as the project demanded.<br>
+Inside the folder curated_dataset, the data is divided into train and test files.
+
 ---
 
 ## 2. **Model Choices**
