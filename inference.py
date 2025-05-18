@@ -5,6 +5,7 @@ from tqdm import tqdm
 import torch
 from downloader import download_and_extract
 from transformers import ViltProcessor, ViltForQuestionAnswering, ViltConfig
+from peft import PeftModel
 
 def main():
     parser = argparse.ArgumentParser()
