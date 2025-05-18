@@ -4,7 +4,7 @@ from PIL import Image
 from tqdm import tqdm
 import torch
 from downloader import download_and_extract
-from transformers import ViltProcessor, ViltForQuestionAnswering
+from transformers import ViltProcessor, ViltForQuestionAnswering, ViltConfig
 
 def main():
     parser = argparse.ArgumentParser()
