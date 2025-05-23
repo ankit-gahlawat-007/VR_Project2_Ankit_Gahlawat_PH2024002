@@ -8,6 +8,15 @@ from downloader import download_and_extract
 from transformers import ViltProcessor, ViltForQuestionAnswering, ViltConfig
 from peft import PeftModel
 
+def normalize_answer(ans):
+    ans = ans.lower()
+    tokens = re.split(r'[_-]+', ans)
+    final_tokens = []
+    for token in tokens:
+        camel_split = re.sub(r'([a-z])([A-Z])', r'\1 \2', token).split()
+        final_tokens.extend(camel_split)
+    return ' '.join(final_tokens)
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--image_dir', type=str, required=True, help='Path to image folder')
@@ -62,7 +71,8 @@ def main():
         except Exception as e:
             answer = "error"
         # Ensure answer is one word and in English (basic post-processing)
-        answer = str(answer).split()[0].lower()
+        answer = normalize_answer(str(answer)).split()[0].lower()
+        
         generated_answers.append(answer)
 
     df["generated_answer"] = generated_answers
